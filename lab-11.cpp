@@ -35,13 +35,17 @@ void inputArtist(Artists *);
 // displayArtist() displays data for the artist
 // arguments: pointer, array size
 // return: nothing
-void displayArtist(Artists *);
+void displayArtist(const Artists *);
 
 int main(){
     // Collect the number of artists you would like to input
     int numOfA;
     cout << "Enter # of Artists: ";
     cin >> numOfA;
+
+    // Getting bugs with the idescriminate cin.ignore had to change
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    
 
     // Create dynamic array of artists
     Artists *list = new Artists[numOfA];
@@ -65,15 +69,14 @@ void inputArtist(Artists * aptr){
     // Keep count of which artist we are on
     static int nrA = 1;
 
-    // Getting bugs with the idescriminate cin.ignore had to change
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
     // Collect artist name and monthly listenners
     cout << "Input data for artist #" << nrA << ": " << endl;
     cout << "Name: ";
     getline(cin, aptr->name);
     cout << "Monthly Listenners: ";
     cin >> aptr->monthlyListenners;
+
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     // Get number of songs for each artist, then make the for loop to fill the array of fav songs
     cout << "Enter # of songs of theirs you enjoy: ";
@@ -106,7 +109,7 @@ void displayArtist(const Artists * aptr){
     // Display fav songs array, with the size being determined dependent on the ammount of favsongs per artist
     cout << "\tFav Songs:" << endl;
     for(int i = 0; i < aptr->favCount; i++){
-        cout << "\tSong #" << i + 1 << ": " << aptr->favSongs[i] << endl;
+        cout << "\t\tSong #" << i + 1 << ": " << aptr->favSongs[i] << endl;
     }
 
     cout << endl;
