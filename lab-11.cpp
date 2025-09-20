@@ -56,21 +56,46 @@ int main(){
 }
 
 void inputArtist(Artists * aptr){
+    // Keep count of which artist we are on, and create variable for how many songs per artist
     static int nrA = 1;
     int numSongs;
+
+    cin.ignore();
+    // Collect artist name and monthly listenners
     cout << "Input data for artist #" << nrA << ": " << endl;
     cout << "Name: ";
     getline(cin, aptr->name);
     cout << "Monthly Listenners: ";
     cin >> aptr->monthlyListenners;
+
+    // Get number of songs for each artist, then make the for loop to fill the array of fav songs
     cout << "Enter # of songs of theirs you enjoy: ";
     cin >> numSongs;
-    for(int i = 0; i < numSongs; i++){
-        cout << "Favorite Song #" << i + 1 << ": ";
-        cin.ignore();
-        getline(cin, aptr->favSongs[i]);
+    // Create if statement to only collect if they have a favorite song
+    if(numSongs > 0){
+        aptr -> favSongs = new string[numSongs];
+        for(int i = 0; i < numSongs; i++){
+            cout << "Favorite Song #" << i + 1 << ": ";
+            cin.ignore();
+            getline(cin, aptr->favSongs[i]);
+        }
     }
-    cin.ignore();
+
     cout << endl;
     nrA++;
+}
+
+void displayArtist(Artists * aptr){
+    // Display data
+    cout << "Artist Overview:" << endl;
+    cout << "\tName: " << aptr->name << endl;
+    cout << "\tMonthly Listenners: " << aptr->monthlyListenners << endl;
+
+    // Display fav songs array, with the size being determined dependent on the ammount of favsongs per artist
+    cout << "\tFav Songs:" << endl;
+    for(int i = 0; i < sizeof(aptr->favSongs); i++){
+        cout << "\tSong #" << i + 1 << ": " << aptr->favSongs[i] << endl;
+    }
+
+    cout << endl;
 }
