@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <limits>
 using namespace std;
 
 // Brainstorming idea:
@@ -15,6 +16,7 @@ struct Artists {
     string name;
     int monthlyListenners;
     string * favSongs;
+    int favCount;
 
     // Create destructor for the favSongs array
     ~Artists() {
@@ -53,14 +55,19 @@ int main(){
     for(int i = 0; i < numOfA; i++){
         displayArtist(&list[i]);
     }
+
+    // delete list
+    delete[] list;
+    return 0;
 }
 
 void inputArtist(Artists * aptr){
-    // Keep count of which artist we are on, and create variable for how many songs per artist
+    // Keep count of which artist we are on
     static int nrA = 1;
-    int numSongs;
 
-    cin.ignore();
+    // Getting bugs with the idescriminate cin.ignore had to change
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
     // Collect artist name and monthly listenners
     cout << "Input data for artist #" << nrA << ": " << endl;
     cout << "Name: ";
@@ -70,13 +77,18 @@ void inputArtist(Artists * aptr){
 
     // Get number of songs for each artist, then make the for loop to fill the array of fav songs
     cout << "Enter # of songs of theirs you enjoy: ";
-    cin >> numSongs;
+    cin >> aptr->favCount;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
     // Create if statement to only collect if they have a favorite song
-    if(numSongs > 0){
-        aptr -> favSongs = new string[numSongs];
-        for(int i = 0; i < numSongs; i++){
+    if (aptr->favCount < 0){
+        aptr->favCount = 0;
+    }   
+
+    if(aptr->favCount > 0){
+        aptr -> favSongs = new string[aptr->favCount];
+        for(int i = 0; i < aptr->favCount; i++){
             cout << "Favorite Song #" << i + 1 << ": ";
-            cin.ignore();
             getline(cin, aptr->favSongs[i]);
         }
     }
@@ -85,7 +97,7 @@ void inputArtist(Artists * aptr){
     nrA++;
 }
 
-void displayArtist(Artists * aptr){
+void displayArtist(const Artists * aptr){
     // Display data
     cout << "Artist Overview:" << endl;
     cout << "\tName: " << aptr->name << endl;
@@ -93,7 +105,7 @@ void displayArtist(Artists * aptr){
 
     // Display fav songs array, with the size being determined dependent on the ammount of favsongs per artist
     cout << "\tFav Songs:" << endl;
-    for(int i = 0; i < sizeof(aptr->favSongs); i++){
+    for(int i = 0; i < aptr->favCount; i++){
         cout << "\tSong #" << i + 1 << ": " << aptr->favSongs[i] << endl;
     }
 
